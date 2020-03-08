@@ -41,6 +41,7 @@ export const generate: GenerateBoiler = async ({
   cwdPath,
 }) => {
   const actions = []
+  const { appDirName, pkgName } = allAnswers
 
   for (const file of files) {
     const { name, source } = file
@@ -49,13 +50,25 @@ export const generate: GenerateBoiler = async ({
       actions.push({
         action: "write",
         path: join(cwdPath, name),
-        source: source.replace(
-          /web-components-serverless-boiler/g,
-          allAnswers.pkgName
-        ),
+        source: source
+          .replace(
+            /web-components-serverless-boiler/g,
+            pkgName
+          )
+          .replace(/appDirName/g, appDirName),
       })
     }
   }
+
+  actions.push({
+    action: "merge",
+    path: join(cwdPath, "package.json"),
+    source: {
+      scripts: {
+        [`deploy:${appDirName}`]: "npm run release && npx sls deploy",
+      },
+    },
+  })
 
   return actions
 }

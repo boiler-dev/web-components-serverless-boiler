@@ -12,7 +12,7 @@ provider:
 
 functions:
   web-components-serverless-boiler:
-    handler: dist/src/web/lambdaServer.lambdaServer
+    handler: dist/src/appDirName/lambdaServer.lambdaServer
     events:
       - http:
           path: /

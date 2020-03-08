@@ -1,0 +1,22 @@
+service: web-components-serverless-boiler
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  timeout: 30
+  environment:
+    STAGE: ${opt:stage, self:provider.stage}
+
+functions:
+  web-components-serverless-boiler:
+    handler: dist/src/web/lambdaServer.lambdaServer
+    events:
+      - http:
+          path: /
+          method: ANY
+      - http:
+          path: /{any+}
+          method: ANY

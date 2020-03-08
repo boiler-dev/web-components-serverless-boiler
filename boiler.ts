@@ -11,7 +11,7 @@ export const install: InstallBoiler = async () => {
   actions.push({
     action: "npmInstall",
     dev: true,
-    source: ["serverless", "serverless-offline"],
+    source: ["serverless"],
   })
 
   return actions
@@ -49,7 +49,7 @@ export const generate: GenerateBoiler = async ({
     if (name === "serverless.yml") {
       actions.push({
         action: "write",
-        path: join(cwdPath, name),
+        path: join(cwdPath, `serverless.${appDirName}.yml`),
         source: source
           .replace(
             /web-components-serverless-boiler/g,
@@ -59,16 +59,6 @@ export const generate: GenerateBoiler = async ({
       })
     }
   }
-
-  actions.push({
-    action: "merge",
-    path: join(cwdPath, "package.json"),
-    source: {
-      scripts: {
-        [`deploy:${appDirName}`]: "npm run release && npx sls deploy",
-      },
-    },
-  })
 
   return actions
 }

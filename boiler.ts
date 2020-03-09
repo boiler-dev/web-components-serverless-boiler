@@ -11,7 +11,7 @@ export const install: InstallBoiler = async () => {
   actions.push({
     action: "npmInstall",
     dev: true,
-    source: ["serverless"],
+    source: ["serverless", "serverless-offline"],
   })
 
   return actions

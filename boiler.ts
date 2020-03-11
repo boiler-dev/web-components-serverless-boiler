@@ -1,4 +1,4 @@
-import { basename, join } from "path"
+import { basename } from "path"
 import { ActionBoiler, PromptBoiler } from "boiler-dev"
 
 export const install: ActionBoiler = async () => {
@@ -33,28 +33,22 @@ export const prompt: PromptBoiler = async ({
 
 export const generate: ActionBoiler = async ({
   allAnswers,
-  files,
-  cwdPath,
 }) => {
   const actions = []
   const { appDirName, pkgName } = allAnswers
 
-  for (const file of files) {
-    const { name, source } = file
-
-    if (name === "serverless.yml") {
-      actions.push({
-        action: "write",
-        path: join(cwdPath, `serverless.${appDirName}.yml`),
-        source: source
-          .replace(
-            /web-components-serverless-boiler/g,
-            pkgName
-          )
-          .replace(/appDirName/g, appDirName),
-      })
-    }
-  }
+  actions.push({
+    action: "write",
+    path: `serverless.${appDirName}.yml`,
+    sourcePath: "serverless.yml",
+    modify: (src: string) =>
+      src
+        .replace(
+          /web-components-serverless-boiler/g,
+          pkgName
+        )
+        .replace(/appDirName/g, appDirName),
+  })
 
   return actions
 }

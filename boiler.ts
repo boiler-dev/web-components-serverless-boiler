@@ -39,7 +39,7 @@ export const generate: ActionBoiler = async ({
 
   actions.push({
     action: "write",
-    path: `serverless.${appDirName}.yml`,
+    path: `deploy/serverless.${appDirName}.yml`,
     sourcePath: "serverless.yml",
     modify: (src: string) =>
       src
@@ -51,4 +51,31 @@ export const generate: ActionBoiler = async ({
   })
 
   return actions
+}
+
+export const absorb: ActionBoiler = async ({
+  allAnswers,
+  writes,
+}) => {
+  const { appDirName, pkgName } = allAnswers
+
+  return writes.map(({ path, sourcePath }) => ({
+    action: "write",
+    sourcePath: path,
+    path: sourcePath,
+    modify: (src: string): string =>
+      src
+        .replace(
+          new RegExp(`: ${pkgName}`, "g"),
+          ": web-components-serverless-boiler"
+        )
+        .replace(
+          new RegExp(`${appDirName}:`, "g"),
+          "appDirName:"
+        )
+        .replace(
+          new RegExp(`/${appDirName}/`, "g"),
+          "/appDirName/"
+        ),
+  }))
 }

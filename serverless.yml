@@ -1,5 +1,4 @@
 service: web-components-serverless-boiler
-
 plugins:
   - serverless-offline
 
@@ -11,7 +10,7 @@ provider:
     STAGE: ${opt:stage, self:provider.stage}
 
 functions:
-  web-components-serverless-boiler:
+  appDirName:
     handler: dist/src/appDirName/lambdaServer.lambdaServer
     events:
       - http:
